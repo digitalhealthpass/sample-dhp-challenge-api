@@ -1,0 +1,383 @@
+{
+   "openapi": "3.0.0",
+   "info": {
+      "title": "Healthpass Challenge API",
+      "version": "2.1.2",
+      "description": "\n<h2>Change History:</h2>\n<ul>\n<li><b>2.1.2</b> - 2020-08-19: Added `reason` to and made `verified` required for `VerifyIdentityResponse`</li>\n<li><b>2.1.1</b> - 2020-08-19: Removed byte check for signature</li>\n<li><b>2.1.0</b> - 2020-08-15: Restored bearer security scheme to allow for testing the service via swagger-ui</li>\n<li><b>2.0.2</b> - 2020-08-11: Corrected scopes</li>\n<li><b>2.0.1</b> - 2020-08-09: Removed unnecessary security scheme for bearer token; removed invalid string formats; changed request content-type to json for `generateToken`</li>\n<li><b>2.0.0</b> - 2020-08-08: Updated security schemes and scopes, made `id_token` required in `TokenRequest`, added property validations</li>\n<li><b>1.2.0</b> - 2020-08-04: Made `public_key` of `ChallengeIdentityRequest` optional; removed scope description</li>\n<li><b>1.1.0</b> - 2020-08-04: Removed bearer token as a requirement for `generateToken`</li>\n<li><b>1.0.0</b> - 2020-08-04: Updated request body specification (`Token`) of  `generateToken`; Updated attributes of `TokenResponse`</li>\n<li><b>0.1.1</b> - 2020-07-30: Updated `Error` and `ErrorResponse`; switched `generateToken` security scheme to bearer scheme; removed `apikey` from `TokenRequest`</li>\n<li><b>0.1.0</b> - 2020-07-29: Initial draft</li>\n</ul>\n"
+   },
+   "tags": [
+      {
+         "name": "authentication",
+         "description": "authentication and authorization"
+      },
+      {
+         "name": "identity verification",
+         "description": "public key holder verification"
+      }
+   ],
+   "servers": [
+      {
+         "url": "/api/v1/challenge",
+         "description": "CDT"
+      },
+      {
+         "url": "/",
+         "description": "Sandbox"
+      }
+   ],
+   "paths": {
+      "/login": {
+         "post": {
+            "operationId": "generateToken",
+            "tags": [
+               "authentication"
+            ],
+            "description": "generate token",
+            "requestBody": {
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "$ref": "#/components/schemas/TokenRequest"
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "...",
+                  "headers": {
+                     "x-correlation-id": {
+                        "schema": {
+                           "$ref": "#/components/headers/x-correlation-id"
+                        }
+                     }
+                  },
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/TokenResponse"
+                        }
+                     }
+                  }
+               },
+               "default": {
+                  "headers": {
+                     "x-correlation-id": {
+                        "schema": {
+                           "$ref": "#/components/headers/x-correlation-id"
+                        }
+                     }
+                  },
+                  "description": "...",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/ErrorResponse"
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "/generate": {
+         "post": {
+            "operationId": "generateIdentityChallenge",
+            "security": [
+               {
+                  "bearerAuth": []
+               }
+            ],
+            "tags": [
+               "identity verification"
+            ],
+            "description": "generate an identity challenge message to share with an identity holder",
+            "requestBody": {
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "$ref": "#/components/schemas/ChallengeIdentityRequest"
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "...",
+                  "headers": {
+                     "x-correlation-id": {
+                        "schema": {
+                           "$ref": "#/components/headers/x-correlation-id"
+                        }
+                     }
+                  },
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/ChallengeIdentityResponse"
+                        }
+                     }
+                  }
+               },
+               "default": {
+                  "headers": {
+                     "x-correlation-id": {
+                        "schema": {
+                           "$ref": "#/components/headers/x-correlation-id"
+                        }
+                     }
+                  },
+                  "description": "...",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/ErrorResponse"
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "/verify": {
+         "post": {
+            "operationId": "verifyIdentity",
+            "security": [
+               {
+                  "bearerAuth": []
+               }
+            ],
+            "tags": [
+               "identity verification"
+            ],
+            "description": "verify an identity holder's response to an identify challenge",
+            "requestBody": {
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "$ref": "#/components/schemas/VerifyIdentityRequest"
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "...",
+                  "headers": {
+                     "x-correlation-id": {
+                        "schema": {
+                           "$ref": "#/components/headers/x-correlation-id"
+                        }
+                     }
+                  },
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/VerifyIdentityResponse"
+                        }
+                     }
+                  }
+               },
+               "default": {
+                  "headers": {
+                     "x-correlation-id": {
+                        "schema": {
+                           "$ref": "#/components/headers/x-correlation-id"
+                        }
+                     }
+                  },
+                  "description": "...",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/ErrorResponse"
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      }
+   },
+   "components": {
+      "securitySchemes": {
+         "bearerAuth": {
+            "type": "http",
+            "scheme": "bearer",
+            "bearerFormat": "JWT"
+         }
+      },
+      "headers": {
+         "x-correlation-id": {
+            "schema": {
+               "type": "string",
+               "description": "..."
+            }
+         }
+      },
+      "schemas": {
+         "Scope": {
+            "type": "string"
+         },
+         "ChallengeIdentityRequest": {
+            "type": "object",
+            "properties": {
+               "public_key": {
+                  "type": "string",
+                  "format": "byte",
+                  "minLength": 25,
+                  "description": "The public key to be verified. If specified, the API will reject any request to `verifyIdentity` if `public_key` does not match the one for which the challenge message was generated."
+               }
+            }
+         },
+         "ChallengeIdentityResponse": {
+            "type": "object",
+            "properties": {
+               "challenge": {
+                  "$ref": "#/components/schemas/Challenge"
+               }
+            },
+            "required": [
+               "challenge"
+            ]
+         },
+         "Challenge": {
+            "type": "object",
+            "properties": {
+               "nonce": {
+                  "type": "string"
+               }
+            },
+            "required": [
+               "nonce"
+            ]
+         },
+         "VerifyIdentityRequest": {
+            "allOf": [
+               {
+                  "$ref": "#/components/schemas/ChallengeIdentityRequest"
+               }
+            ],
+            "type": "object",
+            "properties": {
+               "signature": {
+                  "type": "string",
+                  "minLength": 25,
+                  "description": "..."
+               }
+            },
+            "required": [
+               "signature"
+            ]
+         },
+         "VerifyIdentityResponse": {
+            "type": "object",
+            "properties": {
+               "verified": {
+                  "type": "boolean",
+                  "description": "whether the holder's identity has been verified"
+               },
+               "reason": {
+                  "type": "string",
+                  "description": "the reason the identity could not be verified"
+               }
+            },
+            "required": [
+               "verified"
+            ]
+         },
+         "TokenRequest": {
+            "description": "...",
+            "type": "object",
+            "properties": {
+               "username": {
+                  "type": "string",
+                  "minLength": 5
+               },
+               "password": {
+                  "type": "string",
+                  "format": "password",
+                  "minLength": 5
+               }
+            },
+            "required": [
+               "username",
+               "password"
+            ]
+         },
+         "TokenResponse": {
+            "type": "object",
+            "properties": {
+               "access_token": {
+                  "type": "string"
+               },
+               "id_token": {
+                  "type": "string"
+               },
+               "token_type": {
+                  "type": "string",
+                  "enum": [
+                     "Bearer"
+                  ]
+               },
+               "expires_in": {
+                  "type": "number"
+               },
+               "scope": {
+                  "$ref": "#/components/schemas/Scope"
+               }
+            },
+            "required": [
+               "access_token",
+               "id_token",
+               "token_type",
+               "scope"
+            ]
+         },
+         "ErrorResponse": {
+            "type": "object",
+            "properties": {
+               "message": {
+                  "type": "string",
+                  "description": "..."
+               },
+               "trace": {
+                  "type": "string",
+                  "description": "..."
+               },
+               "errors": {
+                  "type": "array",
+                  "description": "...",
+                  "items": {
+                     "$ref": "#/components/schemas/Error"
+                  }
+               }
+            },
+            "required": [
+               "errors"
+            ]
+         },
+         "Error": {
+            "type": "object",
+            "required": [
+               "code",
+               "message"
+            ],
+            "properties": {
+               "errorCode": {
+                  "type": "string",
+                  "description": "..."
+               },
+               "message": {
+                  "type": "string",
+                  "description": "..."
+               },
+               "path": {
+                  "type": "string",
+                  "description": "..."
+               }
+            }
+         }
+      }
+   }
+}
